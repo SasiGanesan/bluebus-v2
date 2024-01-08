@@ -6,24 +6,24 @@ import User from '../model/userModel.js';
 //@desc  Auth user & get token
 //@route POST /api/users/login
 //@access Public
-const loginUser = asyncHandler(async(req,res)=>{
+const authUser = asyncHandler(async(req,res)=>{
     const {email,password}=req.body;
 
-    const user = await User(email, password)
+    const user = await User.findOne({email})
 
     try{
-        if(user){
+        if(user&& (await user.matchPassword(password))){
             generateToken(res,user._id);
 
             res.status(200).json({
                 _id:user._id,
-                name:user.email,
+                name:user.name,
                 email:user.email,
                 isAdmin:user.isAdmin,
             });
         }else{
             res.status(401).json({
-                message: "Invaild email or password"
+                message: "Invalid email or password"
             })
         }
         }catch(err){
@@ -34,38 +34,36 @@ const loginUser = asyncHandler(async(req,res)=>{
 // @desc Register user
 // @route POST /api/users
 // @access Public
-const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password, isAdmin } = req.body;
-    if(!name || !email || !password){
-        res.status(400).json({ message: "Invaild user data"})
-    }
-    try {
-        const userExists = await checkUser(email)
+const registerUser = asyncHandler(async(req,res)=>{
+    const {name ,email,password }=req.body;
 
-        if (userExists){
-            return await res.status(400).json({
-                message : "User already Exists"
-            })
-        }
-        const user = await createUser(name, email, password, isAdmin);
+    const userExists = await User.findOne({email});
 
-            generateToken(res, user._id)
-
-            res.status(201).json({
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                isAdmin: user.isAdmin,
-            })
-    } catch (error) {
+    if(userExists){
         res.status(401).json({
-            message: error.message
+            message: "User already exist"
         })
     }
+    const user =await User.create({
+        name,email,password
+    });
 
-    
+    if(user){
+
+        generateToken(res,user._id);
+        res.status(201).json({
+            _id:user._id,
+            name: user.name,
+            email:user.email,
+            isAdmin:user.isAdmin,
+        })
+    } else{
+        res.status(401).json({
+            message: "Invalid user data"
+        })
+    }
 });
-export{loginUser,registerUser}
+export{authUser,registerUser}
 
 
 

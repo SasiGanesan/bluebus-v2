@@ -28,6 +28,7 @@ app.use(express.urlencoded({extended:false}))
 // })
 
 app.use('/api/users',userRoutes);
+//app.use('/api/auth')
 
 app.listen(port,()=>{
     console.log('Server running on the port '+port)

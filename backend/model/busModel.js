@@ -15,7 +15,7 @@ const busSchema = new mongoose.Schema({
         type:Number,
         require:true,
     },
-    isSeleeper:{
+    isSleeper:{
         type:Boolean,
         default:false,
     },
