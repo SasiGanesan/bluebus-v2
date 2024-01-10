@@ -5,7 +5,8 @@ import { createBus } from '../controllers/busController.js';
 
 const router=express.Router();
 
-router.post('/bus',admin, createBus)
+router.post('/bus',protect,admin, createBus)
+
 
 export default router;
 
