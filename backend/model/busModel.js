@@ -3,17 +3,17 @@ import mongoose from 'mongoose';
 const busSchema = new mongoose.Schema({
     user_id :{
         type:mongoose.Schema.Types.ObjectId,
-        require:true,
+        required:true,
         rel:'User'
     },
     busNumber:{
         type:String,
-        require:true,
+        required:true,
         unique: true
     },
     busSeats:{
         type:Number,
-        require:true,
+        required:true,
     },
     isSleeper:{
         type:Boolean,

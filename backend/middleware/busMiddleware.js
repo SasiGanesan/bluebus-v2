@@ -13,9 +13,9 @@ const busOwner=async(req,res,next)=>{
 				res.status(404).json({ message: "User can't add the bus"})
 			}
 		}
-	} catch (err) {
+	} catch (error) {
         res.status(400).json({
-            message: err.message
+            message: error.message
         })
 }
 }

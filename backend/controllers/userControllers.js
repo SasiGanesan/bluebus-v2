@@ -63,7 +63,26 @@ const registerUser = asyncHandler(async(req,res)=>{
         })
     }
 });
-export{authUser,registerUser}
+
+//@desc  Get user by Id
+//@route Get /api/users/id
+//@access Public
+
+const getUserById = asyncHandler(async(req,res)=>{
+    const user=await User.findById(req.params.id)
+    if(user){
+        return res.json(user);
+    }else{
+        res.status(400).json({
+            message: "Invalid user Id"
+        })
+
+    }
+})
+
+
+
+export{authUser,registerUser,getUserById}
 
 
 

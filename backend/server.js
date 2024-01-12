@@ -5,8 +5,9 @@ import dotenv from "dotenv";
 dotenv.config();
 import connectDB from "./config/db.js";
 import userRoutes from './routes/userRoutes.js'
-import busRoutes from './routes/busRoutes.js'
-
+import busRoutes from './routes/busRoutes.js';
+import tripRoutes from './routes/tripRoutes.js';
+import ticketRoutes from './routes/ticketRoutes.js'
 connectDB();
 
 const port = process.env.PORT || 8000;
@@ -29,7 +30,9 @@ app.use(express.urlencoded({extended:false}))
 // })
 
 app.use('/api/users',userRoutes);
-app.use('/api/buses',busRoutes)
+app.use('/api/buses',busRoutes);
+app.use('/api/trips',tripRoutes)
+app.use('/api/tickets',ticketRoutes)
 //app.use('/api/auth')
 
 app.listen(port,()=>{

@@ -1,46 +1,46 @@
 import mongoose from "mongoose";
 
 const tripSchema = new mongoose.Schema({
+   
     busNumber:{
         type: String,
-        require: true
+        required: true
     },
     origin:{
         type:String,
-        require:true,
+        required:true,
     },
     destination:{
         type:String,
-        require:true,
+        required:true,
     },
-    departure:{
+    date:{
         type:Date,
-        require:true,
+        required:true,
     },
-    arrival:{
-        type:Date,
-        require:true,
+    departureTime:{
+        type:String,
+        required:true,
+    },
+    arrivalTime:{
+        type:String,
+        required:true,
     },
     ratings:{
         type:Number,
-        require:true,
     },
     fare:{
         type:Number,
-        require:true,
+        required:true,
     },
     availableSeats:{
         type:Number,
-        require:true,
+        required:true,
     },
     bookedSeats:{
         type:Number,
     },
-    date:{
-        type:Date,
-        require:true,
-    },
-
+    
 },
 {timestamps:true}
 )
