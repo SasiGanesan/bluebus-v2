@@ -6,6 +6,13 @@ const tripSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    availableSeats:{
+        type:Number,
+        required:true,
+    },
+    bookedSeats:[{
+        type:Number,
+    }],
     origin:{
         type:String,
         required:true,
@@ -33,13 +40,8 @@ const tripSchema = new mongoose.Schema({
         type:Number,
         required:true,
     },
-    availableSeats:{
-        type:Number,
-        required:true,
-    },
-    bookedSeats:{
-        type:Number,
-    },
+   
+   
     
 },
 {timestamps:true}

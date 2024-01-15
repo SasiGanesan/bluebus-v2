@@ -15,7 +15,7 @@ const busOwner=async(req,res,next)=>{
 		}
 	} catch (error) {
         res.status(400).json({
-            message: error.message
+            message: "error.message"
         })
 }
 }

@@ -7,9 +7,6 @@ const passengerSchema=mongoose.Schema({
     age:{
         type:String,
     },
-    gender:{
-        type:String,
-    },
     seatNo:{
         type:Number,
     },
