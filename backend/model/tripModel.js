@@ -21,10 +21,6 @@ const tripSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    date:{
-        type:Date,
-        required:true,
-    },
     departureTime:{
         type:String,
         required:true,
@@ -33,16 +29,15 @@ const tripSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    ratings:{
-        type:Number,
+    date:{
+        type:Date,
+        required:true,
     },
     fare:{
         type:Number,
         required:true,
-    },
-   
-   
-    
+    }, 
+
 },
 {timestamps:true}
 )

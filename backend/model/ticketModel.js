@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const passengerSchema=mongoose.Schema({
+const passengerSchema = mongoose.Schema({
     name:{
         type:String,
     },
@@ -29,7 +29,7 @@ const ticketSchema = new mongoose.Schema({
             rel: "Bus"
         },
         bookingDate: {
-            type: Date,
+            type: String,
             required: true
         },
         passengers:[passengerSchema],
@@ -50,18 +50,21 @@ const ticketSchema = new mongoose.Schema({
             required:true
         },
         departureTime:{
-            type:Date,
+            type:String,
             required:true
         },
         arrivalTime:{
-            type:Date,
+            type:String,
             required:true
         },
         isBooked:{
             type:Boolean,
             default:true,
         },
-        totalPrice:{type:Number,required:true}
+        totalPrice:{
+            type:Number,
+            required:true
+        }
 },{
     timestamps:true
 })

@@ -1,81 +1,102 @@
 import { userId } from '../middleware/authMiddleware.js';
-//import Trip from '../model/tripModel.js';
-//import Ticket from "../model/ticketModel.js";
-import {checkSeatExist,findTripById,bookTicket,UpdateTrip } from '../service/ticketService.js';
+import Trip from '../model/tripModel.js';
+import Ticket from "../model/ticketModel.js";
+import {checkSeatExist,findTripById,bookTicket,UpdateTrip,findTicketById } from '../service/ticketService.js';
 //import mongoose from 'mongoose';
 
 //create Ticket
 const createTicket=async(req,res)=>{
     const {passengers}=req.body;
     const {trip_id} = req.params;
-    //console.log(trip_id)
+   // console.log(trip_id)
 
     try {   
-        //Find the trip
+        //Find the trip  
         const trip=await findTripById(trip_id);
-        
+        //console.log(trip)
         if(!trip){
             return res.status(404).json({message: 'Trip not found'})
         }
-
         const user_id = userId(req)
         const busNumber = trip.busNumber;
         const bookingDate = new Date;
+        const numberOfSeats = passengers.length;
+        const date = trip.date;
         const origin = trip.origin;
         const destination = trip.destination;
-        const date = trip.date;
         const departureTime = trip.departureTime;
         const arrivalTime = trip.arrivalTime;
-        const numberOfSeats = passengers.length;
         const totalPrice = passengers.length * trip.fare;
 
+       //console.log(user_id,busNumber,bookingDate,origin,destination,date,departureTime,arrivalTime,numberOfSeats,totalPrice)
+
         // Check seat availability
-        const seatNumbers = passengers.map(passenger => passenger.seatNumber);
-        const seatExists = await checkSeatExist(trip_id,seatNumbers);
+        const tripId = trip_id.trim()
+        const seatNumbers = passengers.map(passenger => passenger.seatNo);
+    //    console.log(seatNumbers)
+        const seatExists = await checkSeatExist(tripId,seatNumbers);
+        // console.log(seatExists)
         if (seatExists) {
             return res.status(400).json({ message: 'seats already booked' });
         }
-
+        // console.log(seatExists)
        
             //Create a new ticket
-        const ticket = await bookTicket({
+        const ticket = await bookTicket(
             user_id,
-            trip_id, 
-            busNumber, 
-            bookingDate, 
-            passengers, 
-            numberOfSeats, 
-            date, 
-            departureTime, 
-            arrivalTime, 
-            origin, 
-            destination, 
+            tripId,
+            busNumber,
+            bookingDate,
+            passengers,
+            numberOfSeats,
+            date,
+            origin,
+            destination,
+            departureTime,
+            arrivalTime,
             totalPrice
-        });
+        );
 
-        const updateTrip = await UpdateTrip(trip_id, numberOfSeats, seatNumbers);
+        const updateTrip = await UpdateTrip(tripId, numberOfSeats, seatNumbers);
     
         if (!updateTrip) {
             return res.status(500).json({ message: 'Cannot to update trip' });
         }
 
-         res.status(201).json({
-            trip: ticket.trip_id,
-            user: ticket.user_id,
+         res.status(200).json({ 
+            user_id: ticket.user_id,
+            trip_id: ticket.trip_id,
             busNumber: ticket.busNumber,
             bookingDate: ticket.bookingDate,
+            passengers:ticket.passengers,
             numberOfSeats: ticket.numberOfSeats,
-            date: ticket.date,
-            departureTime: ticket.departureTime,
-            arrivalTime: ticket.arrivalTime,
+            date:ticket.date,
             origin: ticket.origin,
             destination: ticket.destination,
-            totalPrice})
+            departureTime: ticket.departureTime,
+            arrivalTime: ticket.arrivalTime,
+            totalPrice:ticket.totalPrice
+        })
     }catch (error) {
         res.status(500).json({message:'Ticket not created'})
         console.log(error.message);
     }
 }
 
+const findTicket = async(req,res)=>{
+    try{
+        const ticket=await findTicketById(req.params.id)
 
-export{createTicket}
+        if(ticket){
+            return res.status(200).json(ticket);
+        }else{
+            return res.status(404).json({message:'Ticket not found'})
+        }
+    }catch(error){
+        res.status(500).json({message:'Ticket already exists'})
+        console.log(error.message);
+    }
+}
+
+
+export{createTicket,findTicket}
