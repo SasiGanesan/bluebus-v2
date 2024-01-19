@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import asyncHandler from './asyncHandler.js';
 import User from '../model/userModel.js';
+import Ticket from '../model/ticketModel.js'
 
 // Protect routes
 const protect = asyncHandler(async (req, res, next) => {
@@ -51,4 +52,48 @@ const userId = (req) => {
         return null;
     }
 };
-export { protect, admin, userId};
+
+//Get User
+const checkUser= (req,res,next)=>{
+    const user_id = userId(req)
+    const id=req.params.id
+    if(id===user_id){
+        next();
+    }else{
+        return res.status(404).json({message:"User Id not found"})
+    }
+}
+
+
+//Check Login User
+const checkAuth=async(req,res,next)=>{
+    const user_id=userId(req)
+    const ticket = req.params.id
+
+    try{
+        const user =await Ticket.findById(ticket.trim());
+        if(!user){
+            return res.status(404).json({
+                message:"Ticket not found"
+            })
+        }
+        if(user.user_id !=user_id){
+            return res.status(404).json({message:'User ticket not found'})
+        }else{
+            next();
+        }
+    }catch(error){
+        return res.status(404).json({message: "Invalid ticket Id"})
+    }
+}
+
+const userExist=async(req,res,next)=>{
+    const {email}=req.body
+    const user=await User.findOne({email})
+    if(user){
+        return res.status(400).json({message:"User already exists"})
+    }
+    next();
+}
+
+export { protect, admin, userId,checkUser,checkAuth,userExist};

@@ -43,6 +43,40 @@ const createTrip = asyncHandler(async(req,res)=>{
       }
 })
 
+
+const searchBus = async(req,res)=>{
+    try {
+        const origin = req.query.from;
+        //console.log(origin)
+        const destination=req.query.to;
+        //console.log(destination)
+        const date=req.query.date;
+       // console.log(date)
+    
+    // const {from:origin, to:destination, date}=req.query;
+    // console.log(origin)
+    // if (!origin || !destination || !date) {
+    //     return res.status(400).json({ message: 'Missing required parameters.' });
+    //   }
+
+    const trips=await Trip.find({
+             origin,
+             destination,
+             date
+        })
+        console.log(trips);
+        if(trips.length===0){
+            return res.status(404).json({message: "No available bus"})
+        }else{
+            return res.status(200).json(trips)
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'server error' });
+    }
+   
+}
+
 //Get Trip by id
 const getTripById =asyncHandler(async(req,res)=>{
     try {
@@ -57,11 +91,8 @@ const getTripById =asyncHandler(async(req,res)=>{
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Invalid Trip Id' });
-    }
-    
-    
+    } 
 })
 
 
-
-export { createTrip,getTripById }
+export { createTrip,searchBus,getTripById}

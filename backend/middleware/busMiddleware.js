@@ -20,4 +20,14 @@ const busOwner=async(req,res,next)=>{
 }
 }
 
-export {busOwner}
+const checkBusExists = async(req,res,next)=>{
+	const { busNumber } = req.body
+	const bus = await Bus.findOne({busNumber});
+	if(bus){
+		return res.status(400).json({message:"Bus already exists"})
+	}else{
+		next();
+	}
+}
+
+export {busOwner,checkBusExists}
