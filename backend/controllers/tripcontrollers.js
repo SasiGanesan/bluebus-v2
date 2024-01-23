@@ -46,26 +46,20 @@ const createTrip = asyncHandler(async(req,res)=>{
 
 const searchBus = async(req,res)=>{
     try {
-        const origin = req.query.from;
+        let origin = req.query.from;
         //console.log(origin)
-        const destination=req.query.to;
+        let destination=req.query.to;
         //console.log(destination)
-        const date=req.query.date;
-       // console.log(date)
+        let date=req.query.date;
+    //    console.log(date)
     
-    // const {from:origin, to:destination, date}=req.query;
-    // console.log(origin)
-    // if (!origin || !destination || !date) {
-    //     return res.status(400).json({ message: 'Missing required parameters.' });
-    //   }
-
     const trips=await Trip.find({
-             origin,
+             origin ,
              destination,
              date
         })
-        console.log(trips);
-        if(trips.length===0){
+        // console.log(trips);
+        if(!trips.length){
             return res.status(404).json({message: "No available bus"})
         }else{
             return res.status(200).json(trips)

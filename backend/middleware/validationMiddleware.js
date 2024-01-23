@@ -79,7 +79,7 @@ const tripValidation=async(req,res,next)=>{
 
 const ticketValidation=async(req,res,next)=>{
     const ticketSchema=Joi.object({
-        passenger: Joi.array().items(
+        passengers: Joi.array().items(
             Joi.object({
                 name: Joi.string().required(),
                 age: Joi.number().required(),
@@ -106,7 +106,7 @@ const searchBusValidation=async(req,res,next)=>{
         to : Joi.string().required(),
         date: Joi.date().required(),
     });
-    const {error} = await searchBusSchema.validate(req.body);
+    const {error} = await searchBusSchema.validate(req.query);
     if(error){
         return res.status(400).json({
             message: error.message
