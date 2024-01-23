@@ -8,6 +8,7 @@
     "test": "jest",
     "start": "nodemon server.js"
   },
+  
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -23,6 +24,7 @@
     "mongoose": "^8.0.3",
     "nodemon": "^3.0.2"
   },
+
   "devDependencies": {
     "@babel/core": "^7.23.7",
     "@babel/preset-env": "^7.23.8",
