@@ -1,0 +1,4 @@
+// jest.config.js
+{
+    "presets":[["@babel/preset-env", {"targets": {"node":"current"}}]]
+}
