@@ -1,10 +1,10 @@
-import asyncHandler from '../middleware/asyncHandler.js';
+// import asyncHandler from '../middleware/asyncHandler.js';
 import Bus from '../model/busModel.js';
 import { userId } from "../middleware/authMiddleware.js";
 //import { busOwner } from "../middleware/busMiddleware.js";
 
 // create a new bus
-const createBus = asyncHandler(async (req, res) => {
+const createBus = async (req, res) => {
   try {
     const {busNumber, busSeats, isSleeper } = req.body;
 
@@ -33,9 +33,9 @@ if(bus){
  
    // res.status(201).json({ message: 'Bus created successfully', bus: newBus });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
-});
+};
 
 export { createBus }
