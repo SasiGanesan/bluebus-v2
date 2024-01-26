@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import asyncHandler from "../middleware/asyncHandler.js";
+//import asyncHandler from "../middleware/asyncHandler.js";
 import Trip from "../model/tripModel.js";
 
 //create trip
 
-const createTrip = asyncHandler(async(req,res)=>{
+const createTrip = async(req,res)=>{
    
         const { busNumber,origin,destination,departureTime,arrivalTime,fare,availableSeats,date } = req.body;
         try{
@@ -38,10 +38,10 @@ const createTrip = asyncHandler(async(req,res)=>{
             })
         
     }catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ message: error.message });
       }
-})
+}
 
 
 const searchBus = async(req,res)=>{
@@ -65,14 +65,14 @@ const searchBus = async(req,res)=>{
             return res.status(200).json(trips)
         }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'server error' });
+        // console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
    
 }
 
 //Get Trip by id
-const getTripById =asyncHandler(async(req,res)=>{
+const getTripById =async(req,res)=>{
     try {
         const trip=await Trip.findById(req.params.id)
         if(trip){       
@@ -83,10 +83,10 @@ const getTripById =asyncHandler(async(req,res)=>{
             })
         }
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ message: 'Invalid Trip Id' });
     } 
-})
+}
 
 
 export { createTrip,searchBus,getTripById}
