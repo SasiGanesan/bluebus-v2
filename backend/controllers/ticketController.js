@@ -107,7 +107,7 @@ const cancelTickets=async(req,res)=>{
             const seatNumbers=ticket.passengers
             const seatNo=seatNumbers.map(passenger=>passenger.seatNo);
             if(!ticket.isBooked){
-                return res.status(400).json({
+                return res.status(404).json({
                     message: "Ticket Already canceled"
                 })
             }
@@ -126,14 +126,14 @@ const cancelTickets=async(req,res)=>{
 }
     catch(error){
         res.status(500).json({message: "Invalid Ticket Id"})
-        console.error(error.message)
+        // console.error(error.message)
     }
 }
 
 const getAllTickets=async(req,res)=>{
     try {
         const user_id=userId(req)
-        console.log(user_id)
+        // console.log(user_id)
         const tickets=await getTickets(user_id)
         //console.log(tickets)
         if(tickets.length===0){
@@ -142,8 +142,7 @@ const getAllTickets=async(req,res)=>{
             return res.status(200).json(tickets)
         }
     } catch (error) {
-        res.status(500).json({message:error.message})
-        console.error(error.message);
+        res.status(500).json({message:'server error'})
     }
 
 }

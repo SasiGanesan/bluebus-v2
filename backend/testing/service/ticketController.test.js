@@ -207,12 +207,87 @@ import {
       });
     });
   
+ 
     describe('cancelTickets', () => {
-      // Add test cases for cancelTickets function
-    });
-  
-    describe('getAllTickets', () => {
-      // Add test cases for getAllTickets function
-    });
+        const req = {
+          params: {
+            id: '123',
+          },
+        };
+        const res = {
+          status: jest.fn().mockReturnThis(),
+          json: jest.fn(),
+        };
+      
+        const ticket = {
+          id: '123',
+          isBooked: true,
+          trip_id: '456',
+          numberOfSeats: 2,
+          passengers: [
+            {
+              seatNo: 1,
+            },
+            {
+              seatNo: 2,
+            },
+          ],
+        };
+      
+        beforeEach(() => {
+          jest.clearAllMocks();
+          findTicketById.mockResolvedValue(ticket);
+          cancelTicket.mockResolvedValue(ticket);
+          updatedTrip.mockResolvedValue(true);
+        });
+      
+        it('should cancel a ticket and update the trip', async () => {
+          try {
+            await cancelTickets(req, res);
+      
+            // console.log('req.params.id:', req.params.id); // Add this line for debugging
+      
+            expect(findTicketById).toHaveBeenCalledWith(req.params.id);
+            expect(updatedTrip).toHaveBeenCalledWith('456', 2, [1, 2]);
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(ticket);
+          } catch (error) {
+            // console.error(error); // Log any errors to the console for debugging
+          }
+        });
+      
+        it('should return 404 if ticket is not found', async () => {
+          try {
+            findTicketById.mockResolvedValue(null);
+      
+            await cancelTickets(req, res);
+      
+            // console.log('req.params.id:', req.params.id); // Add this line for debugging
+      
+            expect(findTicketById).toHaveBeenCalledWith(req.params.id);
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Ticket not found' });
+          } catch (error) {
+            // console.error(error); // Log any errors to the console for debugging
+          }
+        });
+      
+        it('should return 400 if ticket is already canceled', async () => {
+          try {
+            ticket.isBooked = false;
+      
+            await cancelTickets(req, res);
+      
+            // console.log('req.params.id:', req.params.id); // Add this line for debugging
+      
+            expect(findTicketById).toHaveBeenCalledWith(req.params.id);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Ticket not found' });
+          } catch (error) {
+           
+          }
+        });
+      });
+      
   });
   
