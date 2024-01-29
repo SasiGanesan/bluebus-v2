@@ -35,34 +35,45 @@ const authUser = async(req,res)=>{
 // @route POST /api/users
 // @access Public
 const registerUser = async(req,res)=>{
-    const {name ,email,password }=req.body;
+    try {
+        const {name ,email,password,confirmPassword }=req.body;
 
-    const userExists = await User.findOne({email});
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+              message: "Password do not match",
+            });
+          }
 
-    if(userExists){
-        res.status(400).json({
-            message: "User already exists"
-        })
+        const userExists = await User.findOne({email});
+    
+        if(userExists){
+            res.status(400).json({
+                message: "User already exists"
+            })
+        }
+        const user =await User.create({
+            name,email,password,confirmPassword
+        });
+    
+        if(user){
+    
+            generateToken(res,user._id);
+            res.status(201).json({
+                _id:user._id,
+                name: user.name,
+                email:user.email,
+                isAdmin:user.isAdmin,
+            })
+        } else{
+            console.error(error);
+            res.status(404).json({
+                message: "Invalid user data",
+            })
+        }
+    } catch (error) {
+        res.status(500).json({message:"Enter valid details"});
     }
-    const user =await User.create({
-        name,email,password
-    });
-
-    if(user){
-
-        generateToken(res,user._id);
-        res.status(201).json({
-            _id:user._id,
-            name: user.name,
-            email:user.email,
-            isAdmin:user.isAdmin,
-        })
-    } else{
-        console.error(error);
-        res.status(404).json({
-            message: "Invalid user data",
-        })
-    }
+  
 };
 
 //@desc  Get user by Id
@@ -70,15 +81,20 @@ const registerUser = async(req,res)=>{
 //@access Public
 
 const getUserById =async(req,res)=>{
-    const user=await User.findById(req.params.id)
-    if(user){
-        return res.json(user);
-    }else{
-        res.status(400).json({
-            message: "Invalid user Id"
-        })
-
+    try {
+        const user=await User.findById(req.params.id)
+        if(user){
+            return res.json(user);
+        }else{
+            res.status(400).json({
+                message: "Invalid user Id"
+            })
+    
+        }
+    } catch (error) {
+        res.status(500).json({message:"Enter valid Id"});
     }
+  
 }
 
 
