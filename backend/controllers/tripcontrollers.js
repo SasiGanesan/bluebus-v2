@@ -39,7 +39,7 @@ const createTrip = async(req,res)=>{
         
     }catch (error) {
         // console.error(error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Internal Server Error" });
       }
 }
 
@@ -52,10 +52,13 @@ const searchBus = async(req,res)=>{
         //console.log(destination)
         let date=req.query.date;
     //    console.log(date)
+
+    const originRegex = new RegExp(origin, 'i');
+    const destinationRegex = new RegExp(destination, 'i')
     
     const trips=await Trip.find({
-             origin ,
-             destination,
+             origin : originRegex,
+             destination : destinationRegex,
              date
         })
         // console.log(trips);

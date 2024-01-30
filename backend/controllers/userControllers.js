@@ -36,7 +36,7 @@ const authUser = async(req,res)=>{
 // @access Public
 const registerUser = async(req,res)=>{
     try {
-        const {name ,email,password,confirmPassword }=req.body;
+        const {name ,email,password,confirmPassword,isAdmin }=req.body;
 
         if (password !== confirmPassword) {
             return res.status(400).json({
@@ -52,7 +52,7 @@ const registerUser = async(req,res)=>{
             })
         }
         const user =await User.create({
-            name,email,password,confirmPassword
+            name,email,password,confirmPassword,isAdmin
         });
     
         if(user){
@@ -65,7 +65,7 @@ const registerUser = async(req,res)=>{
                 isAdmin:user.isAdmin,
             })
         } else{
-            console.error(error);
+            // console.error(error);
             res.status(404).json({
                 message: "Invalid user data",
             })

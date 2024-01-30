@@ -4,6 +4,11 @@ import User from '../model/userModel.js';
 import generateToken from '../utils/generateToken.js';
 
 jest.mock('../utils/generateToken.js');
+jest.mock('../model/userModel');
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
 describe('authUser', () => {
   it('should authenticate user and return a token', async () => {
@@ -68,28 +73,29 @@ describe('authUser', () => {
 
 //registerUser testing
 describe('registerUser', () => {
-
-  const req = {
-    body: {
-      name: 'Jane Doe',
-      email: 'jane@example.com',
-      password: 'password123',
-    },
-  };
-  const res = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn(),
-  };
-
-
   it('should register a new user and return a token', async () => {
-    User.findOne = jest.fn().mockResolvedValue(null);
-    User.create = jest.fn().mockResolvedValue({
+    const req = {
+      body: {
+        name: 'Jane Doe',
+        email: 'jane@example.com',
+        password: 'password123',
+        confirmPassword: 'password123',
+        isAdmin: false,
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    User.findOne.mockResolvedValue(null);
+    User.create.mockResolvedValue({
       _id: 'newUserId',
       name: 'Jane Doe',
       email: 'jane@example.com',
       isAdmin: false,
     });
+
     await registerUser(req, res);
 
     expect(User.findOne).toHaveBeenCalledWith({ email: 'jane@example.com' });
@@ -97,7 +103,10 @@ describe('registerUser', () => {
       name: 'Jane Doe',
       email: 'jane@example.com',
       password: 'password123',
+      confirmPassword: 'password123',
+      isAdmin: false,
     });
+    expect(generateToken).toHaveBeenCalledWith(res, 'newUserId');
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith({
       _id: 'newUserId',
@@ -107,8 +116,22 @@ describe('registerUser', () => {
     });
   });
 
-  it('should return 400 for an existing user', async () => {
-    User.findOne = jest.fn().mockResolvedValue({
+  it('should return 400 for existing user', async () => {
+    const req = {
+      body: {
+        name: 'Jane Doe',
+        email: 'jane@example.com',
+        password: 'password123',
+        confirmPassword: 'password123',
+        isAdmin: false,
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    User.findOne.mockResolvedValue({
       _id: 'existingUserId',
       name: 'Existing User',
       email: 'existing@example.com',
@@ -122,25 +145,60 @@ describe('registerUser', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'User already exists' });
   });
 
-  // it('should return 500 for invalid user data', async () => {
-  //   User.findOne = jest.fn().mockResolvedValue(null);
-  //   User.create = jest.fn().mockRejectedValue({message:'Invalid user data'});
+  it('should return 400 for password mismatch', async () => {
+    const req = {
+      body: {
+        name: 'Jane Doe',
+        email: 'jane@example.com',
+        password: 'password123',
+        confirmPassword: 'differentPassword',
+        isAdmin: false,
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
 
+    await registerUser(req, res);
 
-  //   await registerUser(req, res);
+    expect(User.findOne).not.toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Password do not match' });
+  });
 
-  //   expect(User.findOne).toHaveBeenCalledWith({ email: 'jane@example.com' });
-  //   expect(User.create).toHaveBeenCalledWith({
-  //     name: 'Jane Doe',
-  //     email: 'jane@example.com',
-  //     password: 'password123',
-  //   });
-  //   expect(res.status).toHaveBeenCalledWith(500);
-  //   expect(res.json).toHaveBeenCalledWith({ message: 'Invalid user data' });
-  // });
+  it('should return 500 for invalid user data', async () => {
+    const req = {
+      body: {
+        name: 'Jane Doe',
+        email: 'jane@example.com',
+        password: 'password123',
+        confirmPassword: 'password123',
+        isAdmin: false,
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    User.findOne.mockResolvedValue(null);
+    User.create.mockRejectedValue(new Error('Invalid user data'));
+
+    await registerUser(req, res);
+
+    expect(User.findOne).toHaveBeenCalledWith({ email: 'jane@example.com' });
+    expect(User.create).toHaveBeenCalledWith({
+      name: 'Jane Doe',
+      email: 'jane@example.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+      isAdmin: false,
+    });
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Enter valid details' });
+  });
 });
-
-
 
 //getUserById
 describe('getUserById', () => {
