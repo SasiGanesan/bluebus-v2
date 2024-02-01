@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/login',loginValidation,authUser);
 router.post('/register',registerValidation, registerUser)
-router.get('/:id',protect,checkUser,getUserById)
+router.get('/:id',checkUser,getUserById)
 /*router.post('/login',loginUser);
 router.route('/:id').get(getUserbyId)
 .post(registerUser).get(getUserbyId)

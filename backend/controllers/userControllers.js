@@ -87,7 +87,7 @@ const getUserById =async(req,res)=>{
             return res.json(user);
         }else{
             res.status(400).json({
-                message: "User not found"
+                message: "Invalid user Id"
             })
     
         }
