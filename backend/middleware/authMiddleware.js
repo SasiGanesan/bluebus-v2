@@ -54,14 +54,29 @@ const userId = (req) => {
 };
 
 //Get User
-const checkUser= (req,res,next)=>{
+const checkUser= async(req,res,next)=>{
     const user_id = userId(req)
     const id=req.params.id
-    if(id===user_id){
-        next();
-    }else{
-        return res.status(404).json({message:"User Id not found"})
+    try {
+        const user = await User.findById(id);
+        if(!user){
+            return res.status(404).json({
+                message: 'User Not Found'
+            })
+        }
+        if(id === user_id){
+            next();
+        } else {
+            return res.status(404).json({
+                message: "User ID Not Found"
+            })
+        }
+    } catch (error) {
+        return res.status(400).json({
+            message: 'Invalid User ID'
+        })
     }
+    
 }
 
 

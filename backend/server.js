@@ -29,11 +29,12 @@ app.use(express.urlencoded({extended:false}))
 //     res.send("API is running...");
 // })
 
+//api creation
 app.use('/api/users',userRoutes);
 app.use('/api/buses',busRoutes);
 app.use('/api/trips',tripRoutes)
 app.use('/api/tickets',ticketRoutes)
-//app.use('/api/auth')
+
 
 app.listen(port,()=>{
     console.log('Server running on the port '+port)
