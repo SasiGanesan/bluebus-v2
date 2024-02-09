@@ -1,6 +1,6 @@
 import { userId } from '../middleware/authMiddleware.js';
-import Trip from '../model/tripModel.js';
-import Ticket from "../model/ticketModel.js";
+// import Trip from '../model/tripModel.js';
+// import Ticket from "../model/ticketModel.js";
 import {checkSeatExist,findTripById,bookTicket,UpdateTrip,findTicketById, cancelTicket,updatedTrip,getTickets } from '../service/ticketService.js';
 //import mongoose from 'mongoose';
 

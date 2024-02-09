@@ -1,10 +1,9 @@
 import jwt from 'jsonwebtoken';
-import asyncHandler from './asyncHandler.js';
 import User from '../model/userModel.js';
 import Ticket from '../model/ticketModel.js'
 
 // Protect routes
-const protect = asyncHandler(async (req, res, next) => {
+const protect = async (req, res, next) => {
     // Read the JWT from the cookie
    let token = req.cookies.jwt;
 
@@ -14,7 +13,7 @@ const protect = asyncHandler(async (req, res, next) => {
             req.user = await User.findById(decoded.userId).select('-password');
             next();
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             res.status(401);
             throw new Error('Not authorized, token failed')
         }
@@ -23,7 +22,7 @@ const protect = asyncHandler(async (req, res, next) => {
             message: 'Not authorized as admin'
         })
     }
-})
+}
 
 // Admin middleware
 const admin = (req, res, next) => {
@@ -39,11 +38,9 @@ const admin = (req, res, next) => {
 // Get user Id
 const userId = (req) => {
     const token = req.cookies.jwt;
-
     if (!token) {
         return null;
     }
-
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         return decodedToken.userId;

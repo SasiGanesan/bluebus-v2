@@ -1,4 +1,3 @@
-//import { getTicketById } from "../controllers/ticketController.js";
 import Ticket from "../model/ticketModel.js";
 import Trip from "../model/tripModel.js";
 

@@ -1,20 +1,18 @@
-import mongoose from "mongoose";
-//import asyncHandler from "../middleware/asyncHandler.js";
 import Trip from "../model/tripModel.js";
+import {tripCreation,existsTrip,findTripById,tripSearching} from '../service/tripService.js'
 
 //create trip
-
 const createTrip = async(req,res)=>{
    
-        const { busNumber,origin,destination,departureTime,arrivalTime,fare,availableSeats,date } = req.body;
+        const { busNumber,origin,destination,date,departureTime,arrivalTime,fare,availableSeats} = req.body;
         try{
         //check trip using busNumber and date
-        const existingTrip = await Trip.findOne({busNumber, date});
+        const existingTrip = await existsTrip({busNumber, date});
         if(existingTrip){
             return res.status(400).json({message: 'This trip already exists'});
         }
         //Create a new trip
-        const trip=await Trip.create({
+        const trip=await tripCreation(
             busNumber,
             origin,
             destination,
@@ -23,9 +21,8 @@ const createTrip = async(req,res)=>{
             arrivalTime,  
             fare,
             availableSeats,
-           
-        })
-           return res.status(200).json({
+           )
+           return res.status(201).json({
                 busNumber:trip.busNumber,
                 origin:trip.origin,
                 destination:trip.destination,
@@ -40,6 +37,7 @@ const createTrip = async(req,res)=>{
     }catch (error) {
         // console.error(error);
         res.status(500).json({ message: "Internal Server Error" });
+        // console.log(error)
       }
 }
 
@@ -52,15 +50,12 @@ const searchBus = async(req,res)=>{
         //console.log(destination)
         let date=req.query.date;
     //    console.log(date)
-
-    const originRegex = new RegExp(origin, 'i');
-    const destinationRegex = new RegExp(destination, 'i')
     
-    const trips=await Trip.find({
-             origin : originRegex,
-             destination : destinationRegex,
+    const trips=await tripSearching(
+             origin,
+             destination,
              date
-        })
+        )
         // console.log(trips);
         if(!trips.length){
             return res.status(404).json({message: "No available bus"})
@@ -68,7 +63,7 @@ const searchBus = async(req,res)=>{
             return res.status(200).json(trips)
         }
     } catch (error) {
-        // console.error(error);
+        console.error(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
    
@@ -77,7 +72,7 @@ const searchBus = async(req,res)=>{
 //Get Trip by id
 const getTripById =async(req,res)=>{
     try {
-        const trip=await Trip.findById(req.params.id)
+        const trip=await findTripById(req.params.id)
         if(trip){       
           res.status(200).json(trip);
         }else{

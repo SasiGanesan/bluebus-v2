@@ -46,7 +46,7 @@ const createBusValidation = async(req,res,next)=>{
     const {error} = await createBusSchema.validate(req.body);
     if(error){
         return res.status(400).json({
-            message: error.message
+            message: "validation Error"
         })
     }else{
         next();
