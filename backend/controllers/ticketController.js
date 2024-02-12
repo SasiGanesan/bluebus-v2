@@ -89,6 +89,7 @@ const getTicketById = async(req,res)=>{
         //console.log(ticket)
         if(ticket){
             return res.status(200).json(ticket);
+            // console.log(ticket)
         }else{
             return res.status(404).json({message:'Ticket not found'})
         }

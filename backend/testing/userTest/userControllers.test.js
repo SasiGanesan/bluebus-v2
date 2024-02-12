@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
-import { authUser, registerUser, getUserById } from '../controllers/userControllers.js';
-import User from '../model/userModel.js';
-import generateToken from '../utils/generateToken.js';
+import { authUser, registerUser, getUserById } from '../../controllers/userControllers.js';
+import User from '../../model/userModel.js';
+import generateToken from '../../utils/generateToken.js';
 
-jest.mock('../utils/generateToken.js');
-jest.mock('../model/userModel');
+jest.mock('../../utils/generateToken.js');
+jest.mock('../../model/userModel');
 
 beforeEach(() => {
   jest.clearAllMocks();

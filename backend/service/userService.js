@@ -16,7 +16,6 @@ const loginUser = async(email,password)=>{
 
 const findUserById=async(user_id)=>{
     const user = await User.findById(user_id);
-    if(user)
     return user;
 }
 const UserRegister=async(

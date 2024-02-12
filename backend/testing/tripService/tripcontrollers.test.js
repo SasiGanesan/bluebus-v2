@@ -1,7 +1,7 @@
-import { createTrip, searchBus, getTripById } from '../controllers/tripcontrollers.js';
-import Trip from '../model/tripModel';
+import { createTrip, searchBus, getTripById } from '../../controllers/tripcontrollers.js';
+import Trip from '../../model/tripModel.js';
 
-jest.mock('../model/tripModel'); // Mocking the Trip model
+jest.mock('../../model/tripModel'); // Mocking the Trip model
 
 describe('createTrip', () => {
   it('should create a new trip successfully', async () => {

@@ -22,7 +22,7 @@ const createTrip = async(req,res)=>{
             fare,
             availableSeats,
            )
-           return res.status(201).json({
+           return res.status(200).json({
                 busNumber:trip.busNumber,
                 origin:trip.origin,
                 destination:trip.destination,
@@ -35,9 +35,7 @@ const createTrip = async(req,res)=>{
             })
         
     }catch (error) {
-        // console.error(error);
         res.status(500).json({ message: "Internal Server Error" });
-        // console.log(error)
       }
 }
 
@@ -63,7 +61,7 @@ const searchBus = async(req,res)=>{
             return res.status(200).json(trips)
         }
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
    

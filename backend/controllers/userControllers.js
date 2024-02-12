@@ -1,5 +1,5 @@
 import generateToken from "../utils/generateToken.js";
-// import User from '../model/userModel.js';
+import User from '../model/userModel.js';
 import { loginUser,findUserById,UserRegister } from "../service/userService.js";
 
 
@@ -15,7 +15,7 @@ const authUser = async(req,res)=>{
     try{ 
         if(user){
             generateToken(res,user._id);
-            res.status(201).json({
+            res.status(200).json({
                 _id:user._id,
                 name:user.name,
                 email:user.email,
@@ -23,7 +23,7 @@ const authUser = async(req,res)=>{
             });
         }else{
             res.status(401).json({
-                message: "Invalid email or password "
+                message: "Invalid email or password"
             })
         }
         }catch(error){
@@ -43,12 +43,12 @@ const registerUser = async(req,res)=>{
               message: "Password do not match",
             });
           }
-        // const userExists = await User.findOne({email});
-        // if(userExists){
-        //     res.status(400).json({
-        //         message: "User already exists"
-        //     })
-        // }
+        const userExists = await User.findOne({email});
+        if(userExists){
+            res.status(400).json({
+                message: "User already exists"
+            })
+        }
         const user =await UserRegister(name,email,password,confirmPassword,isAdmin);
             generateToken(res,user._id);
             res.status(201).json({
@@ -59,8 +59,8 @@ const registerUser = async(req,res)=>{
             })
         }
      catch (error) {
-        res.status(500).json({message:"User already exists"});
-        // console.log(error)
+        res.status(500).json({message: "Enter valid details"});
+        // console.log(message.error)
     }
 }  
 
@@ -78,12 +78,12 @@ const getUserById =async(req,res)=>{
              res.status(200).json(user);
         }else{
             res.status(400).json({
-                message: "User Not Found"
+                message: "Invalid user Id"
             })
     
         }
     } catch (error) {
-        res.status(500).json({message:"Enter valid User Id"});
+        res.status(500).json({message:"Server Error"});
         // console.log(error)
     }
   

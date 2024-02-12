@@ -1,13 +1,11 @@
-import Bus from '../model/busModel.js';
 import { userId } from "../middleware/authMiddleware.js";
-//import { busOwner } from "../middleware/busMiddleware.js";
 import { BusCreation,existsBus } from '../service/busService.js';
 
 // create a new bus
 const createBus = async (req, res) => {
   try {
     const {busNumber, busSeats, isSleeper } = req.body;
-    console.log(busNumber, busSeats, isSleeper)
+    // console.log(busNumber, busSeats, isSleeper)
 
     // Check busNumber 
     const existingBus = await existsBus({ busNumber });
@@ -29,14 +27,12 @@ if(bus){
       busNumber: bus.busNumber,
       busSeats: bus.busSeats,
       isSleeper: bus.isSleeper
-  })
+  });
 }
- 
-   // res.status(201).json({ message: 'Bus created successfully', bus: newBus });
   } catch (error) {
     // console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
-    console.log(error)
+    // console.log(error)
   }
 };
 

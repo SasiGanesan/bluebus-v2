@@ -2,10 +2,11 @@ import Trip from "../model/tripModel.js";
 
 const existsTrip=async(busNumber,date)=>{
     const trip=await Trip.findOne(busNumber, date)
-    if(trip)
+    if(trip){
     return trip
+     }
+     return null
 }
-
 const tripCreation=async(busNumber,origin,destination,date,departureTime,arrivalTime,fare,availableSeats)=>{
     const trip=await Trip.create({
         busNumber,
