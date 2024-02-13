@@ -7,7 +7,7 @@ import {searchBusValidation,tripValidation} from '../middleware/validationMiddle
 
 const router=express.Router();
 
-router.post('/trip',protect,tripValidation,admin,busOwner, createTrip)
+router.post('/trip',protect,tripValidation,admin,busOwner,createTrip)
 router.get('',searchBusValidation, searchBus)
 router.get('/:id',getTripById)
 export default router;

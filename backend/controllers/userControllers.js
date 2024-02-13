@@ -28,7 +28,7 @@ const authUser = async(req,res)=>{
         }
         }catch(error){
         // console.log(error)
-        res.status(500).json({message:"You're not registered , Please Sign Up"});
+        res.status(500).json({message:"Server Error"});
     }
 };
 

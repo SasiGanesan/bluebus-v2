@@ -7,6 +7,7 @@ const registerValidation=async(req,res,next)=>{
        email: Joi.string().email().trim().required(),
        password: Joi.string().required(),
        confirmPassword:Joi.string().required(),
+       isAdmin:Joi.boolean().required()
     });
     const {error} = await registerSchema.validate(req.body);
     if(error){
