@@ -1,4 +1,4 @@
-import { userId } from "../middleware/authMiddleware.js";
+// import { userId } from "../middleware/authMiddleware.js";
 import { BusCreation,existsBus } from '../service/busService.js';
 
 // create a new bus
@@ -12,7 +12,7 @@ const createBus = async (req, res) => {
     if (existingBus) {
       return res.status(400).json({ message: 'This Bus number already exists' });
     }
-    const user_id = userId(req)
+    const user_id = req.user_id
 
     // Create a new bus
     const bus = await BusCreation(

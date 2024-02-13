@@ -36,24 +36,24 @@ const admin = (req, res, next) => {
 };
 
 // Get user Id
-const userId = (req) => {
-    const token = req.cookies.jwt;
-    if (!token) {
-        return null;
-    }
-    try {
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        return decodedToken.userId;
-    } catch (error) {
-        console.log('Error verifying JWT:', error);
-        return null;
-    }
-};
+// const userId = (req) => {
+//     const token = req.cookies.jwt;
+//     if (!token) {
+//         return null;
+//     }
+//     try {
+//         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+//         return decodedToken.userId;
+//     } catch (error) {
+//         console.log('Error verifying JWT:', error);
+//         return null;
+//     }
+// };
 
 //Get User
 const checkUser= async(req,res,next)=>{
-    const user_id = userId(req)
-    const id=req.params.id
+    const user_id = req.user_id
+    const id = req.params.id
     try {
         const user = await User.findById(id);
         if(!user){
@@ -78,7 +78,7 @@ const checkUser= async(req,res,next)=>{
 
 //Check Login User
 const checkAuth=async(req,res,next)=>{
-    const user_id=userId(req)
+    const user_id=req.user_id
     const ticket = req.params.id
 
     try{
@@ -107,4 +107,4 @@ const userExist=async(req,res,next)=>{
     next();
 }
 
-export { protect, admin, userId,checkUser,checkAuth,userExist};
+export { protect, admin,checkUser,checkAuth,userExist};

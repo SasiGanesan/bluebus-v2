@@ -1,4 +1,4 @@
-import { userId } from '../middleware/authMiddleware.js';
+// import { userId } from '../middleware/authMiddleware.js';
 // import Trip from '../model/tripModel.js';
 // import Ticket from "../model/ticketModel.js";
 import {checkSeatExist,findTripById,bookTicket,UpdateTrip,findTicketById, cancelTicket,updatedTrip,getTickets } from '../service/ticketService.js';
@@ -17,7 +17,7 @@ const createTicket=async(req,res)=>{
         if(!trip){
             return res.status(404).json({message: 'Trip not found'})
         }
-        const user_id = userId(req)
+        const user_id = req.user_id
         const busNumber = trip.busNumber;
         const bookingDate = new Date;
         const numberOfSeats = passengers.length;
@@ -60,7 +60,7 @@ const createTicket=async(req,res)=>{
         const updateTrip = await UpdateTrip(tripId, numberOfSeats, seatNumbers);
     
         if (!updateTrip) {
-            return res.status(500).json({ message: 'Cannot to update trip' });
+            return res.status(400).json({ message: 'Cannot to update trip' });
         }
 
          res.status(200).json({ 
@@ -133,7 +133,7 @@ const cancelTickets=async(req,res)=>{
 
 const getAllTickets=async(req,res)=>{
     try {
-        const user_id=userId(req)
+        const user_id=req.user_id
         // console.log(user_id)
         const tickets=await getTickets(user_id)
         //console.log(tickets)

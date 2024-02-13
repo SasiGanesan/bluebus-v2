@@ -22,7 +22,7 @@ const UserRegister=async(
     name,
     email,
     password,
-    confirmPassword ,isAdmin
+    confirmPassword,isAdmin
 )=>{
     const user=await User.create({
     name,
