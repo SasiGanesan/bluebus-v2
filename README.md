@@ -22,7 +22,7 @@ The backend provides the server-side logic and data management functionalities f
 - **Node.js**: A JavaScript runtime environment used for executing server-side code.
 - **Mongoose**: An Object Data Modeling (ODM) library for MongoDB and Node.js used to model application data and simplify interactions with MongoDB.
 - **Nodemon**: nodemon is a tool that helps develop Node.js based applications by automatically restarting the node application when file changes.
-- 
+- **Joi** : Joi module is a popular module for data validation. This module validates the data based on schemas.
 
 
 ## Installation
