@@ -37,3 +37,5 @@ const tripSearching=async(origin,destination,date)=>{
 }
 
 export {tripCreation,existsTrip,findTripById,tripSearching}
+
+
